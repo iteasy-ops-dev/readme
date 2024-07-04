@@ -1,4 +1,5 @@
 # Golang Code convention
+문서 마지막 작성일: 2024/07/04
 
 모든 코드는 **golint** 및 **go vet**를 실행할 때 오류가 없어야 한다. 
 
