@@ -73,31 +73,43 @@ systemctl restart network
 systemctl restart NetworkManager
 systemctl restart systemd-networkd
 
+# 선택에 따라 택1 -> 확인
 ip addr show br0
 ip link show br0
+brctl show
 ```
 
 ## [가상머신 생성하기](https://docs.redhat.com/ko/documentation/red_hat_enterprise_linux/7/html/virtualization_deployment_and_administration_guide/sect-guest_virtual_machine_installation_overview-creating_guests_with_virt_install)
+### 가상머신 생성 전 작업
+- 가상머신 생성은 CD 또는 ISO을 사용하여 설치하는 것보다는 운영체제 이미지(부팅 이미지)를 Import 하는 방 법을 주로 사용
+- 운영체제 이미지는 레드햇 고객포탈 또는 타 벤더 홈페이지에서 qemu 형태의 이미지를 내려받습니다.
+- 아래 예제는 해당 이미지가 있는 Directory에서의 입력 기준입니다.
+#### [부팅 이미지 root 비밀번호 변경 및 cloud-init 패키지 삭제 ]
+- RedHat 계열일 경우
+- `virt-customize -a {{ 클라우드 이미지 }}.qcow2 --root-password password:redhat`
+- `virt-customize -a {{ 클라우드 이미지 }}.qcow2 --run-command 'yum remove cloud-init* -y'`
+#### [가상머신 이미지 생성(100GB) ]
+- `qemu-img create -f qcow2 {{ 이미지 이름 }}.qcow2 100G`
+#### [부팅 이미지 -> 가상머신 이미지로 복사 ]
+- `virt-filesystems -a {{ 클라우드 이미지 }}.qcow2 -l`
+- `virt-resize --expand /dev/sda1 {{ 경로 }}/{{ 클라우드 이미지 }}.qcow2 {{ 경로 }}/{{ 이미지 이름 }}.qcow2`
+  - 상대경로는 명령어가 제대로 듣지 않는 것으로 확인됨.
 
 ```shell
 # 예시
-sudo virt-install \
-  --name {{ vm_name }} \                                            # 가상 머신의 이름을 지정합니다.
-  --memory {{ memory_MB }} \                                        # 할당할 메모리 양을 MB 단위로 지정합니다.
-  --vcpus {{ cpu }} \                                               # 할당할 가상 CPU 코어의 개수를 지정합니다.
-  --disk path={{ path of image }}.qcow2,size={{ qcow_size_GB }} \   # 가상 머신의 디스크 이미지 경로와 크기를 설정합니다.
-  --os-type {{ os_type }} \                                         # 사용할 운영 체제의 종류를 지정합니다.
-  --os-variant {{ os_variant }} \                                   # 사용할 운영 체제의 Variant를 지정합니다.
-  --network bridge={{ interface }} \                                # 사용할 네트워크 인터페이스를 지정합니다 (브리지 네트워크를 사용할 경우).
-  --graphics {{ none|vnc|spice }} \                                 # 가상 머신의 그래픽 출력 방식을 지정합니다 (none, vnc, spice 등).
-  --console pty,target_type=serial \                                # 가상 콘솔의 설정을 지정합니다 (시리얼을 사용하여 콘솔 접근 설정).
-  --location {{ path of iso }}.iso \                                # 가상 머신에 설치할 운영 체제 ISO 이미지의 경로를 지정합니다.
-  --extra-args 'console=ttyS0,115200n8'                             # 부가적인 커널 부팅 인자를 지정합니다 (시리얼 콘솔 설정).
+virt-install  \
+--name bastion  \
+--os-type linux \
+--os-variant centos7.0 \
+--vcpus 4  \
+--memory 4096 \
+--disk path=/data/images/bastion.qcow2,device=disk,bus=virtio,format=qcow2 \
+--network default \
+--network bridge=br0 \
+--graphics none  \
+--noautoconsole  \
+--import
 ```
-```shell
-virt-install --name centos9 --memory 2048 --vcpus 2 --disk path=/data/disk/centos9.qcow2,size=20 --os-type linux --os-variant centos-stream9 --network bridge=br0 --graphics none --console pty,target_type=serial --location /data/images/centos-stream-9.iso  --extra-args 'console=ttyS0,115200n8'
-```
-
 
 ## Command
 #### `osinfo-query os` : variant옵션에 넣을 os 찾기
@@ -107,9 +119,9 @@ virt-install --name centos9 --memory 2048 --vcpus 2 --disk path=/data/disk/cento
 - `virsh list --all --name `: 이름만 확인
 #### `virsh net-list --all`: 네트워크 확인
 #### `virsh start <vm-name>`: vm 시작
-#### `virsh shutdown <vm-name>`: vm 종료
+#### `virsh undefine <vm-name>`: vm 삭제
 #### `virsh reboot <vm-name>`: vm 재부팅
-#### `virsh destroy <vm-name>`: vm 파괴
+#### `virsh destroy <vm-name>`: vm 종료
 #### `virsh dumpxml <vm-name>`: 구성 확인
 - `virsh dumpxml <vm-name> > vm-config.xml`: 구성 파일 저장
 - `virsh edit <vm-name>`: xml 편집
@@ -119,3 +131,6 @@ virt-install --name centos9 --memory 2048 --vcpus 2 --disk path=/data/disk/cento
 #### `virsh domiflist <vm-name>`: 인터페이스 확인
 #### `virsh domstate <vm-name>`: 실행 여부 확인
 #### `virsh console <vm-name>`: 콘솔 연결
+
+
+
