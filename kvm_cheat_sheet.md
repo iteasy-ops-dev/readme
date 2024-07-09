@@ -86,7 +86,7 @@ brctl show
 - 아래 예제는 해당 이미지가 있는 Directory에서의 입력 기준입니다.
 #### [부팅 이미지 root 비밀번호 변경 및 cloud-init 패키지 삭제 ]
 - RedHat 계열일 경우
-- `virt-customize -a {{ 클라우드 이미지 }}.qcow2 --root-password password:redhat`
+- `virt-customize -a {{ 클라우드 이미지 }}.qcow2 --root-password password:{{ 설정할 비밀번호 }}`
 - `virt-customize -a {{ 클라우드 이미지 }}.qcow2 --run-command 'yum remove cloud-init* -y'`
 #### [가상머신 이미지 생성(100GB) ]
 - `qemu-img create -f qcow2 {{ 이미지 이름 }}.qcow2 100G`
@@ -133,4 +133,5 @@ virt-install  \
 #### `virsh console <vm-name>`: 콘솔 연결
 
 
-
+## etc.
+- [로키리눅스 qcow 사이트](https://dl.rockylinux.org/pub/rocky/)
