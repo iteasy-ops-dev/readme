@@ -1,7 +1,7 @@
 # Red Hat Enterprise Linux 7 
-## Virtualization Deployment and Administration Guide
-이는 RedHat에서 제공하는 PDF를 굉장히 간략하게 정리한 문서입니다.
-자세한 내용은 PDF를 확인하세요
+## [Virtualization Deployment and Administration Guide](https://docs.redhat.com/en/documentation/Red_Hat_Enterprise_Linux/7/html/virtualization_deployment_and_administration_guide/index#idm139848808722112)
+이는 RedHat에서 제공하는 Virtualization Deployment and Administration Guide를 굉장히 간략하게 정리한 문서입니다.
+자세한 내용은 위 링크를 확인하세요
 
 ## Part 1. Deployment
 ### 1. 최소 요구 사항
