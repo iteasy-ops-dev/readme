@@ -95,6 +95,10 @@ GitHub는 플랫폼별 Git 설치 프로그램을 제공하며, 명령줄 도구
 - `git stash pop`: 스태시 스택의 맨 위에서 작업 기록 작성
 - `git stash drop`: 스태시 스택의 맨 위 변경 사항 삭제
 
+## 원격 저장소 파일 삭제
+- `git rm --cached -r [파일]`
+- 커밋 후 푸시
+
 
 ##### 출처
 [GitHub Education](education.github.com)

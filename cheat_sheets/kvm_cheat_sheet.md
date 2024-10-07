@@ -132,6 +132,27 @@ virt-install  \
 #### `virsh domstate <vm-name>`: 실행 여부 확인
 #### `virsh console <vm-name>`: 콘솔 연결
 
+#### 스냅샷 생성(GTP 답변이므로 테스트 필요)
+```sh
+# <domain_name>: 스냅샷을 생성할 가상 머신의 이름
+# <snapshot_name>: 스냅샷의 이름
+# --description "<description>": 스냅샷에 대한 설명 (선택 사항)
+# --atomic: 원자적 스냅샷 생성 (실패 시 롤백)
+# --disk-only: 디스크만 스냅샷 (메모리 상태는 저장하지 않음)
+# --quiesce: 파일 시스템 정지(동결) 후 스냅샷 생성 (게스트 운영 체제가 지원하는 경우)
+virsh snapshot-create-as <domain_name> <snapshot_name> \
+  --description "<description>" \
+  --atomic \
+  --disk-only \
+  --quiesce
+```
+
+#### `virsh snapshot-list <domain_name>`: 스냅샷 목록 확인
+#### `virsh snapshot-info <domain_name> <snapshot_name>`: 스냅샷 정보확인
+#### `virsh snapshot-revert <domain_name> <snapshot_name>`: 스냅샷 되돌리기
+#### `virsh snapshot-delete <domain_name> <snapshot_name>`: 스냅샷 삭제
+
+
 
 ## etc.
 - [로키리눅스 qcow 사이트](https://dl.rockylinux.org/pub/rocky/)

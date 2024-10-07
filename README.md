@@ -10,7 +10,9 @@ ITEAST 서비스 운영센터를 위한 문서입니다.
 4. 비용을 절감합니다.
 
 ## List
-1. [Solution Architecture](./architecture.md)
-2. [Golang Code Convention](./code-convention.md)
-3. [Ansible](./ansible_cheat_sheet.md)
-4. [Git](./git_cheat_sheet.md)
+1. [개발관련 업무 프로세스](./manage.md)
+2. [Solution Architecture](./architecture.md)
+3. [Golang Code Convention](./code-convention.md)
+4. [Ansible](./cheat_sheets/ansible_cheat_sheet.md)
+5. [Git](./cheat_sheets/git_cheat_sheet.md)
+6. [kvm](./cheat_sheets/kvm_cheat_sheet.md)
